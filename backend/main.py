@@ -24,7 +24,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://securestegochat.vercel.app"
+        "https://securestegoc.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
