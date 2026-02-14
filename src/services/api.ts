@@ -37,7 +37,7 @@ export interface Message {
 
 export const api = {
   async register(data: RegisterData) {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+    const response = await fetch(`${API_BASE_URL}/api/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -52,7 +52,7 @@ export const api = {
   },
 
   async login(data: LoginData) {
-    const response = await fetch(`${API_BASE_URL}/login`, {
+    const response = await fetch(`${API_BASE_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -67,7 +67,7 @@ export const api = {
   },
 
   async getMe(token: string): Promise<User> {
-    const response = await fetch(`${API_BASE_URL}/me`, {
+    const response = await fetch(`${API_BASE_URL}/api/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -76,7 +76,7 @@ export const api = {
   },
 
   async getFriends(token: string): Promise<User[]> {
-    const response = await fetch(`${API_BASE_URL}/friends`, {
+    const response = await fetch(`${API_BASE_URL}/api/friends`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -85,7 +85,7 @@ export const api = {
   },
 
   async addFriend(token: string, friendUsername: string) {
-    const response = await fetch(`${API_BASE_URL}/friends/request`, {
+    const response = await fetch(`${API_BASE_URL}/api/friends/request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ export const api = {
   },
 
   async searchUsers(token: string, query: string): Promise<User[]> {
-    const response = await fetch(`${API_BASE_URL}/users/search?q=${query}`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/search?q=${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -112,7 +112,7 @@ export const api = {
   },
 
   async getMessages(token: string, friendId: number): Promise<Message[]> {
-    const response = await fetch(`${API_BASE_URL}/messages/${friendId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/messages/${friendId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -121,7 +121,7 @@ export const api = {
   },
 
   async sendTextMessage(token: string, receiverId: number, content: string) {
-    const response = await fetch(`${API_BASE_URL}/messages/text`, {
+    const response = await fetch(`${API_BASE_URL}/api/messages/text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export const api = {
     formData.append('receiver_id', receiverId.toString());
 
     const response = await fetch(
-      `${API_BASE_URL}/messages/image?receiver_id=${receiverId}`,
+      `${API_BASE_URL}/api/ messages/image?receiver_id=${receiverId}`,
       {
         method: 'POST',
         headers: {
