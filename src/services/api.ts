@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://securestegochat.onrender.com';
+const API_BASE_URL = 'https://securestegochat.onrender.com/api';
 
 interface RegisterData {
   username: string;
@@ -42,10 +42,12 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Registration failed');
     }
+
     return response.json();
   },
 
@@ -55,10 +57,12 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Login failed');
     }
+
     return response.json();
   },
 
@@ -66,6 +70,7 @@ export const api = {
     const response = await fetch(`${API_BASE_URL}/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (!response.ok) throw new Error('Failed to fetch user data');
     return response.json();
   },
@@ -74,6 +79,7 @@ export const api = {
     const response = await fetch(`${API_BASE_URL}/friends`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (!response.ok) throw new Error('Failed to fetch friends');
     return response.json();
   },
@@ -87,10 +93,12 @@ export const api = {
       },
       body: JSON.stringify({ friend_username: friendUsername }),
     });
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to add friend');
     }
+
     return response.json();
   },
 
@@ -98,6 +106,7 @@ export const api = {
     const response = await fetch(`${API_BASE_URL}/users/search?q=${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (!response.ok) throw new Error('Failed to search users');
     return response.json();
   },
@@ -106,6 +115,7 @@ export const api = {
     const response = await fetch(`${API_BASE_URL}/messages/${friendId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     if (!response.ok) throw new Error('Failed to fetch messages');
     return response.json();
   },
@@ -119,6 +129,7 @@ export const api = {
       },
       body: JSON.stringify({ receiver_id: receiverId, content }),
     });
+
     if (!response.ok) throw new Error('Failed to send message');
     return response.json();
   },
@@ -128,13 +139,17 @@ export const api = {
     formData.append('file', file);
     formData.append('receiver_id', receiverId.toString());
 
-    const response = await fetch(`${API_BASE_URL}/messages/image?receiver_id=${receiverId}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/messages/image?receiver_id=${receiverId}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
+
     if (!response.ok) throw new Error('Failed to send image');
     return response.json();
   },
