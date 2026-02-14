@@ -20,10 +20,13 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="SecureStegoChat API")
 
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI()
+
 origins = [
-    "https://securestego.vercel.app",  # your frontend
+    "https://securestego.vercel.app",
 ]
 
 app.add_middleware(
@@ -33,6 +36,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 os.makedirs("uploads", exist_ok=True)
