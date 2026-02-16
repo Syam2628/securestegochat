@@ -69,11 +69,10 @@ export function ChatMessage({ message, isOwn }: ChatMessageProps) {
             <span className="text-xs text-gray-600 mb-1 px-2">{message.sender_username}</span>
           )}
           <div
-            className={`rounded-2xl px-4 py-2 ${
-              isOwn
+            className={`rounded-2xl px-4 py-2 ${isOwn
                 ? 'bg-blue-600 text-white rounded-br-none'
                 : 'bg-gray-200 text-gray-800 rounded-bl-none'
-            }`}
+              }`}
           >
             {message.message_type === 'text' ? (
               <p className="whitespace-pre-wrap break-words">{message.content}</p>
@@ -83,8 +82,9 @@ export function ChatMessage({ message, isOwn }: ChatMessageProps) {
                   className={`relative cursor-pointer ${shouldBlurImage ? 'filter blur-lg' : ''}`}
                   onClick={handleImageClick}
                 >
+
                   <img
-                    src={`http://localhost:8000${message.content}`}
+                    src={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${message.content}`}
                     alt="Shared image"
                     className="rounded-lg max-w-xs max-h-64 object-cover"
                   />

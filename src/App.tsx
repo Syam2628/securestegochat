@@ -63,10 +63,15 @@ function AppContent() {
   );
 }
 
+
+import { WakeUpServer } from "./components/WakeUpServer";
+
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <WakeUpServer>
+        <AppContent />
+      </WakeUpServer>
     </AuthProvider>
   );
 }

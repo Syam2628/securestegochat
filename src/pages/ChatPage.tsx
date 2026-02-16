@@ -22,9 +22,12 @@ export function ChatPage() {
     }
   }, [token]);
 
+
   useEffect(() => {
     if (user && token) {
-      const websocket = new WebSocket(`ws://localhost:8000/ws/${user.id}`);
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const WS_URL = API_URL.replace(/^http/, 'ws');
+      const websocket = new WebSocket(`${WS_URL}/ws/${user.id}`);
 
       websocket.onopen = () => {
         console.log('WebSocket connected');
@@ -163,9 +166,8 @@ export function ChatPage() {
                 <button
                   key={friend.id}
                   onClick={() => handleSelectFriend(friend)}
-                  className={`w-full p-4 text-left hover:bg-gray-50 transition ${
-                    selectedFriend?.id === friend.id ? 'bg-blue-50' : ''
-                  }`}
+                  className={`w-full p-4 text-left hover:bg-gray-50 transition ${selectedFriend?.id === friend.id ? 'bg-blue-50' : ''
+                    }`}
                 >
                   <p className="font-semibold text-gray-800">{friend.username}</p>
                   <p className="text-sm text-gray-600">{friend.email}</p>

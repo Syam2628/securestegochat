@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://securestegochat.onrender.com/api';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 interface RegisterData {
   username: string;
@@ -35,57 +36,60 @@ export interface Message {
   };
 }
 
+// Helper for debugging logs
+const logRequest = async (url: string, options?: RequestInit) => {
+  try {
+    const response = await fetch(url, options);
+    console.log(`[API] Request to: ${url}`, { status: response.status });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[API] Error from ${url}:`, errorText);
+      try {
+        const errorJson = JSON.parse(errorText);
+        throw new Error(errorJson.detail || `Request failed with status ${response.status}`);
+      } catch (e) {
+        throw new Error(errorText || `Request failed with status ${response.status}`);
+      }
+    }
+    return response.json();
+  } catch (err) {
+    console.error(`[API] Network error fetching ${url}:`, err);
+    throw err;
+  }
+};
+
 export const api = {
   async register(data: RegisterData) {
-    const response = await fetch(`${API_BASE_URL}/api/register`, {
+    return logRequest(`${API_BASE_URL}/api/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Registration failed');
-    }
-
-    return response.json();
   },
 
   async login(data: LoginData) {
-    const response = await fetch(`${API_BASE_URL}/api/login`, {
+    return logRequest(`${API_BASE_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Login failed');
-    }
-
-    return response.json();
   },
 
   async getMe(token: string): Promise<User> {
-    const response = await fetch(`${API_BASE_URL}/api/me`, {
+    return logRequest(`${API_BASE_URL}/api/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
-    if (!response.ok) throw new Error('Failed to fetch user data');
-    return response.json();
   },
 
   async getFriends(token: string): Promise<User[]> {
-    const response = await fetch(`${API_BASE_URL}/api/friends`, {
+    return logRequest(`${API_BASE_URL}/api/friends`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
-    if (!response.ok) throw new Error('Failed to fetch friends');
-    return response.json();
   },
 
   async addFriend(token: string, friendUsername: string) {
-    const response = await fetch(`${API_BASE_URL}/api/friends/request`, {
+    return logRequest(`${API_BASE_URL}/api/friends/request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -93,35 +97,22 @@ export const api = {
       },
       body: JSON.stringify({ friend_username: friendUsername }),
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Failed to add friend');
-    }
-
-    return response.json();
   },
 
   async searchUsers(token: string, query: string): Promise<User[]> {
-    const response = await fetch(`${API_BASE_URL}/api/users/search?q=${query}`, {
+    return logRequest(`${API_BASE_URL}/api/users/search?q=${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
-    if (!response.ok) throw new Error('Failed to search users');
-    return response.json();
   },
 
   async getMessages(token: string, friendId: number): Promise<Message[]> {
-    const response = await fetch(`${API_BASE_URL}/api/messages/${friendId}`, {
+    return logRequest(`${API_BASE_URL}/api/messages/${friendId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
-    if (!response.ok) throw new Error('Failed to fetch messages');
-    return response.json();
   },
 
   async sendTextMessage(token: string, receiverId: number, content: string) {
-    const response = await fetch(`${API_BASE_URL}/api/messages/text`, {
+    return logRequest(`${API_BASE_URL}/api/messages/text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -129,9 +120,6 @@ export const api = {
       },
       body: JSON.stringify({ receiver_id: receiverId, content }),
     });
-
-    if (!response.ok) throw new Error('Failed to send message');
-    return response.json();
   },
 
   async sendImageMessage(token: string, receiverId: number, file: File) {
@@ -139,18 +127,13 @@ export const api = {
     formData.append('file', file);
     formData.append('receiver_id', receiverId.toString());
 
-    const response = await fetch(
-      `${API_BASE_URL}/api/ messages/image?receiver_id=${receiverId}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      }
+    return logRequest(`${API_BASE_URL}/api/messages/image`, { // Fixed path
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    }
     );
-
-    if (!response.ok) throw new Error('Failed to send image');
-    return response.json();
   },
 };

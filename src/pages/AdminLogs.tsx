@@ -23,8 +23,10 @@ export default function AdminLogs() {
         try {
             const token = localStorage.getItem("token");
 
+
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
             const res = await axios.get(
-                "http://127.0.0.1:8000/api/admin/security-logs",
+                `${API_URL}/api/admin/security-logs`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`

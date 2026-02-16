@@ -20,14 +20,20 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="SecureStegoChat API")
 
-from fastapi.middleware.cors import CORSMiddleware
+
+# ============================== 
+# CORS CONFIGURATION (FIXED)
+# ============================== 
+
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://securestego.vercel.app",  # Production Frontend
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://securestego.vercel.app",
-        "http://localhost:3000",
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
