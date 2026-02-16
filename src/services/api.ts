@@ -1,5 +1,5 @@
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface RegisterData {
   username: string;
@@ -36,11 +36,12 @@ export interface Message {
   };
 }
 
-// Helper for debugging logs
+// Helper for other non-auth requests
 const logRequest = async (url: string, options?: RequestInit) => {
   try {
+    console.log("Calling:", url); // Specific log requested by user
     const response = await fetch(url, options);
-    console.log(`[API] Request to: ${url}`, { status: response.status });
+    console.log(`[API] Response from: ${url}`, { status: response.status });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -61,35 +62,69 @@ const logRequest = async (url: string, options?: RequestInit) => {
 
 export const api = {
   async register(data: RegisterData) {
-    return logRequest(`${API_BASE_URL}/api/register`, {
+    // Explicit implementation as requested
+    const url = `${API_URL}/api/register`;
+    console.log("Calling:", url);
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Register error:", errorText);
+      try {
+        const json = JSON.parse(errorText);
+        throw new Error(json.detail || "Registration failed");
+      } catch {
+        throw new Error("Registration failed");
+      }
+    }
+
+    return response.json();
   },
 
   async login(data: LoginData) {
-    return logRequest(`${API_BASE_URL}/api/login`, {
+    // Explicit implementation as requested
+    const url = `${API_URL}/api/login`;
+    console.log("Calling:", url);
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Login error:", errorText);
+      try {
+        const json = JSON.parse(errorText);
+        throw new Error(json.detail || "Login failed");
+      } catch {
+        throw new Error("Login failed");
+      }
+    }
+
+    return response.json();
   },
 
   async getMe(token: string): Promise<User> {
-    return logRequest(`${API_BASE_URL}/api/me`, {
+    return logRequest(`${API_URL}/api/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   async getFriends(token: string): Promise<User[]> {
-    return logRequest(`${API_BASE_URL}/api/friends`, {
+    return logRequest(`${API_URL}/api/friends`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   async addFriend(token: string, friendUsername: string) {
-    return logRequest(`${API_BASE_URL}/api/friends/request`, {
+    return logRequest(`${API_URL}/api/friends/request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -100,19 +135,19 @@ export const api = {
   },
 
   async searchUsers(token: string, query: string): Promise<User[]> {
-    return logRequest(`${API_BASE_URL}/api/users/search?q=${query}`, {
+    return logRequest(`${API_URL}/api/users/search?q=${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   async getMessages(token: string, friendId: number): Promise<Message[]> {
-    return logRequest(`${API_BASE_URL}/api/messages/${friendId}`, {
+    return logRequest(`${API_URL}/api/messages/${friendId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   async sendTextMessage(token: string, receiverId: number, content: string) {
-    return logRequest(`${API_BASE_URL}/api/messages/text`, {
+    return logRequest(`${API_URL}/api/messages/text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -127,13 +162,12 @@ export const api = {
     formData.append('file', file);
     formData.append('receiver_id', receiverId.toString());
 
-    return logRequest(`${API_BASE_URL}/api/messages/image`, { // Fixed path
+    return logRequest(`${API_URL}/api/messages/image`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
-    }
-    );
+    });
   },
 };
