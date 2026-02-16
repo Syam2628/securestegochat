@@ -61,12 +61,13 @@ const logRequest = async (url: string, options?: RequestInit) => {
 };
 
 export const api = {
+
   async register(data: RegisterData) {
     // Explicit implementation as requested
     const url = `${API_URL}/api/register`;
     console.log("Calling:", url);
 
-    const response = await fetch(url, {
+    const response = await fetch(`${API_URL}/api/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -91,7 +92,7 @@ export const api = {
     const url = `${API_URL}/api/login`;
     console.log("Calling:", url);
 
-    const response = await fetch(url, {
+    const response = await fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
