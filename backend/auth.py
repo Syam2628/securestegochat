@@ -12,12 +12,12 @@ SECRET_KEY = "your-secret-key-change-in-production-09876543211234567890"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 
-from passlib.context import CryptContext
-
 pwd_context = CryptContext(
     schemes=["bcrypt_sha256"],
     deprecated="auto"
 )
+
+security = HTTPBearer()
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
