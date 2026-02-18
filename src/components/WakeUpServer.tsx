@@ -9,7 +9,7 @@ export const WakeUpServer = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const checkServer = async () => {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const API_URL = "https://securestegochat.onrender.com";
             console.log("Checking server status at:", API_URL);
 
             const controller = new AbortController();

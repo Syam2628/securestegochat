@@ -70,8 +70,8 @@ export function ChatMessage({ message, isOwn }: ChatMessageProps) {
           )}
           <div
             className={`rounded-2xl px-4 py-2 ${isOwn
-                ? 'bg-blue-600 text-white rounded-br-none'
-                : 'bg-gray-200 text-gray-800 rounded-bl-none'
+              ? 'bg-blue-600 text-white rounded-br-none'
+              : 'bg-gray-200 text-gray-800 rounded-bl-none'
               }`}
           >
             {message.message_type === 'text' ? (
@@ -84,7 +84,7 @@ export function ChatMessage({ message, isOwn }: ChatMessageProps) {
                 >
 
                   <img
-                    src={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${message.content}`}
+                    src={`https://securestegochat.onrender.com${message.content}`}
                     alt="Shared image"
                     className="rounded-lg max-w-xs max-h-64 object-cover"
                   />

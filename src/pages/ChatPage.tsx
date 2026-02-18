@@ -25,8 +25,7 @@ export function ChatPage() {
 
   useEffect(() => {
     if (user && token) {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const WS_URL = API_URL.replace(/^http/, 'ws');
+      const WS_URL = "wss://securestegochat.onrender.com";
       const websocket = new WebSocket(`${WS_URL}/ws/${user.id}`);
 
       websocket.onopen = () => {
