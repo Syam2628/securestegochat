@@ -157,9 +157,9 @@ export const api = {
   async sendImageMessage(token: string, receiverId: number, file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('receiver_id', receiverId.toString());
 
-    return logRequest(`${API_BASE}/api/messages/image`, {
+
+    return logRequest(`${API_BASE}/api/messages/image?receiver_id=${receiverId}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

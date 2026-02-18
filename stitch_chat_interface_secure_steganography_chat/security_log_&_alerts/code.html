@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Security Log &amp; Alerts | SecureStegano</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11d462",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102218",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+    @layer base {
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    }
+    .expanded-row {
+        display: none;
+    }.row-trigger:focus + .expanded-row,
+    .row-trigger:active + .expanded-row {
+        display: table-row;
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#111814] dark:text-white min-h-screen flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#dbe6e0] dark:border-white/10 bg-white dark:bg-background-dark px-6 md:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined">security</span>
+</div>
+<h2 class="text-[#111814] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">SecureStegano</h2>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-[#111814] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Security Log</a>
+<a class="text-[#111814] dark:text-white/80 text-sm font-medium hover:text-primary transition-colors" href="#">Messages</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<label class="hidden lg:flex flex-col min-w-40 h-10">
+<div class="flex w-full flex-1 items-stretch rounded-lg bg-[#f0f4f2] dark:bg-white/5 h-full">
+<div class="text-[#618972] flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full border-none bg-transparent focus:ring-0 text-sm placeholder:text-[#618972]" placeholder="Search logs..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-[#f0f4f2] dark:bg-white/5 text-[#111814] dark:text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-colors text-sm font-bold">
+<span class="material-symbols-outlined text-lg">logout</span>
+<span class="hidden sm:inline">Logout</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-[#dbe6e0]" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfS7anjhKYegS5BQqrDjgEyuQr8a9pwphvKFKi3nXttuQdHFm1seGTxKBq7E-DsU0KDuJdlxN7KxSlD7X2Tnr9WcXw10aPsNFEUGeLyiLTsgtz6DUnDc03tQHIfkVzcQZL1MotGCoH7LiBlQo-cJZDh1SwUfOTZ6mtWqx77X9jXgv69VsI0s0PweWl2a0Gd2OE5VGB4uuifaIWjuzBJsOe1RGLXRSHu89kcPCCjyP3bulIV4evJ6IyQFJtrwdBtOIsE_V-U9465Q");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="hidden lg:flex flex-col w-64 border-r border-[#dbe6e0] dark:border-white/10 bg-white dark:bg-background-dark p-4">
+<div class="flex flex-col gap-6">
+<div class="flex gap-3 items-center px-2">
+<div class="bg-primary/20 text-primary rounded-lg p-2">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</div>
+<div>
+<h1 class="text-[#111814] dark:text-white text-sm font-bold">Security Panel</h1>
+<p class="text-[#618972] text-xs font-normal">v2.1.0-stable</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#618972] dark:text-white/60 hover:bg-[#f0f4f2] dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium">Overview</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#f0f4f2] dark:bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">list_alt</span>
+<p class="text-sm font-bold">Activity Logs</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#618972] dark:text-white/60 hover:bg-[#f0f4f2] dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<p class="text-sm font-medium">Threat Alerts</p>
+<span class="ml-auto bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#618972] dark:text-white/60 hover:bg-[#f0f4f2] dark:hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-sm font-medium">System Health</p>
+</a>
+</nav>
+<div class="mt-auto border-t border-[#dbe6e0] dark:border-white/10 pt-4 px-2">
+<div class="bg-[#f0f4f2] dark:bg-white/5 p-3 rounded-lg">
+<p class="text-[10px] uppercase tracking-wider text-[#618972] font-bold mb-2">Live Status</p>
+<div class="flex items-center gap-2 mb-1">
+<div class="size-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-xs text-[#111814] dark:text-white">Scanning Port 443</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-4 md:p-8 bg-background-light dark:bg-background-dark/50">
+<div class="max-w-6xl mx-auto space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-white/5 border border-[#dbe6e0] dark:border-white/10 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-[#618972] dark:text-white/60 text-sm font-medium">Total Scans</p>
+<span class="material-symbols-outlined text-primary">image_search</span>
+</div>
+<p class="text-[#111814] dark:text-white text-3xl font-bold">1,284</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm">trending_up</span>
+<p class="text-primary text-xs font-bold">+12.5% this week</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-white/5 border border-[#dbe6e0] dark:border-white/10 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-[#618972] dark:text-white/60 text-sm font-medium">Threats Detected</p>
+<span class="material-symbols-outlined text-red-500">warning</span>
+</div>
+<p class="text-[#111814] dark:text-white text-3xl font-bold">12</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm">trending_down</span>
+<p class="text-primary text-xs font-bold">-2% from last month</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-white/5 border border-[#dbe6e0] dark:border-white/10 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-[#618972] dark:text-white/60 text-sm font-medium">Data Extracted</p>
+<span class="material-symbols-outlined text-blue-500">database</span>
+</div>
+<p class="text-[#111814] dark:text-white text-3xl font-bold">856 KB</p>
+<div class="flex items-center gap-1">
+<p class="text-[#618972] dark:text-white/40 text-xs font-medium">Across 42 valid hidden payloads</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<h2 class="text-[#111814] dark:text-white text-2xl font-bold tracking-tight">Security Log &amp; Alerts</h2>
+<div class="flex gap-2 flex-wrap">
+<div class="flex bg-white dark:bg-white/5 border border-[#dbe6e0] dark:border-white/10 rounded-lg p-1">
+<button class="px-4 py-1.5 rounded text-sm font-bold bg-primary text-white">All</button>
+<button class="px-4 py-1.5 rounded text-sm font-medium text-[#618972] hover:bg-[#f0f4f2] dark:hover:bg-white/5">Safe</button>
+<button class="px-4 py-1.5 rounded text-sm font-medium text-red-500 hover:bg-red-500/10">Threat</button>
+</div>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white text-sm font-bold ml-2">
+<span class="material-symbols-outlined text-lg">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<div class="xl:col-span-2 bg-white dark:bg-white/5 border border-[#dbe6e0] dark:border-white/10 rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#f0f4f2] dark:bg-white/5 text-[#618972] dark:text-white/60 text-xs font-bold uppercase tracking-wider">
+<th class="px-6 py-4">Timestamp</th>
+<th class="px-6 py-4">Event</th>
+<th class="px-6 py-4">Source ID</th>
+<th class="px-6 py-4 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#dbe6e0] dark:divide-white/10">
+<tr class="row-trigger hover:bg-red-500/5 cursor-pointer border-2 border-red-500/60 bg-red-500/10 transition-colors focus:outline-none" tabindex="0">
+<td class="px-6 py-4 text-sm font-medium">14:02:11</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500 text-lg">error</span>
+<span class="text-sm font-semibold">LSB Modification Detected</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-mono text-[#618972] dark:text-white/60">IMG_882.png</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 rounded bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 text-[10px] font-bold uppercase">Threat</span>
+</td>
+</tr>
+<tr class="expanded-row bg-white dark:bg-black/20">
+<td class="px-6 py-4" colspan="4">
+<div class="bg-gray-50 dark:bg-white/5 p-4 rounded-lg border border-[#dbe6e0] dark:border-white/10">
+<h4 class="text-[10px] uppercase font-bold text-[#618972] mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">visibility</span> Extracted hidden text
+            </h4>
+<div class="font-mono text-sm p-3 bg-white dark:bg-black/40 rounded border border-[#dbe6e0] dark:border-white/10 text-[#111814] dark:text-primary overflow-x-auto whitespace-pre-wrap">
+                Meeting confirmed for 22:00. Use auxiliary gate B. Encryption key sequence 44-91-XZ.
+            </div>
+<p class="mt-3 text-[10px] italic text-[#618972] dark:text-white/40 border-t border-[#dbe6e0] dark:border-white/10 pt-2">
+<strong>Security Analysis Disclaimer:</strong> This text has been extracted using heuristic analysis of least significant bits. Verification of content integrity is recommended before action.
+            </p>
+</div>
+</td>
+</tr>
+<tr class="row-trigger hover:bg-primary/5 cursor-pointer transition-colors focus:outline-none" tabindex="0">
+<td class="px-6 py-4 text-sm font-medium">13:58:45</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<span class="text-sm">Clean Scan - No Payload</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-mono text-[#618972] dark:text-white/60">DCIM_0012.jpg</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase">Safe</span>
+</td>
+</tr>
+<tr class="expanded-row bg-white dark:bg-black/20">
+<td class="px-6 py-4 text-center py-8" colspan="4">
+<p class="text-sm text-[#618972]">No hidden content detected in this source image.</p>
+</td>
+</tr>
+<tr class="row-trigger hover:bg-amber-500/5 cursor-pointer transition-colors focus:outline-none" tabindex="0">
+<td class="px-6 py-4 text-sm font-medium">13:42:02</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500 text-lg">info</span>
+<span class="text-sm">Metadata Mismatch</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-mono text-[#618972] dark:text-white/60">USER_PRO_4.webp</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 rounded bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase">Warning</span>
+</td>
+</tr>
+<tr class="expanded-row bg-white dark:bg-black/20">
+<td class="px-6 py-4" colspan="4">
+<div class="bg-amber-50 dark:bg-amber-500/5 p-4 rounded-lg border border-amber-200 dark:border-amber-500/20">
+<h4 class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 mb-2">Extracted hidden text</h4>
+<div class="font-mono text-sm p-3 bg-white dark:bg-black/40 rounded border border-amber-200 dark:border-amber-500/20 text-amber-900 dark:text-amber-300">
+                [PARTIAL DATA CORRUPTION] ...session_id: 8192-X ...
+            </div>
+<p class="mt-3 text-[10px] italic text-amber-700/70 dark:text-amber-400/50">Analysis: Metadata headers do not match file structure. High probability of non-standard compression or manual alteration.</p>
+</div>
+</td>
+</tr>
+<tr class="row-trigger hover:bg-primary/5 cursor-pointer transition-colors focus:outline-none" tabindex="0">
+<td class="px-6 py-4 text-sm font-medium">13:30:15</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<span class="text-sm">Clean Scan - No Payload</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs font-mono text-[#618972] dark:text-white/60">SCREENSHOT_1.png</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase">Safe</span>
+</td>
+</tr>
+<tr class="expanded-row bg-white dark:bg-black/20">
+<td class="px-6 py-4 text-center py-8" colspan="4">
+<p class="text-sm text-[#618972]">No hidden content detected in this source image.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex flex-col gap-6">
+<div class="bg-white dark:bg-white/5 border border-[#dbe6e0] dark:border-white/10 rounded-xl p-6 shadow-sm">
+<h3 class="text-sm font-bold uppercase tracking-wider text-[#618972] mb-4">Real-time Inspection</h3>
+<div class="aspect-video bg-gray-100 dark:bg-white/5 rounded-lg mb-4 flex items-center justify-center relative group overflow-hidden border border-[#dbe6e0] dark:border-white/10">
+<div class="absolute inset-0 bg-center bg-cover opacity-80" data-alt="Abstract image for steganography scan" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBw6vZmO9fZTCUBEAECY3TfsmJxrv8hPa2hDglb0BAt3nOpahdy1cTXAbXxerlb8Ts3bcg7dpMIUdaO8XHNbtkNR5tLv9w94GHgUwByPcGeA-WyE5PZGYzkTP3kLq349HL1-ccvzJX_XXvsHXuYHp2DlvqXckzcdHdKumNLUUfQ8-rdPscGDl9wAE39tkcHIXjGtRrvLHwV8wzlbwyKEjaYC_PupnewyMojnEwScUQuUqDjyU9NzXwc9ROxEJBxao6LxQqs6yRKcA");'></div>
+<div class="absolute inset-0 bg-primary/10 animate-pulse flex items-center justify-center">
+<div class="h-0.5 w-full bg-primary/50 absolute shadow-[0_0_15px_rgba(17,212,98,0.8)]"></div>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-xs font-medium">Stego-Score (Detection Likelihood)</span>
+<span class="text-xs font-bold text-red-500">98.2%</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-white/10 h-2 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-[98.2%]"></div>
+</div>
+</div>
+<div class="bg-gray-50 dark:bg-white/5 rounded-lg p-3">
+<p class="text-[10px] uppercase font-bold text-[#618972] mb-1">Payload Sample</p>
+<div class="font-mono text-sm p-2 bg-black/5 dark:bg-black/20 rounded border border-black/5 dark:border-white/5 text-[#111814] dark:text-primary">
+<span class="opacity-50">$</span> Meet at 0900 - Central Hub. Code: ECHO_SEVEN.
+                                    </div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-2">
+<div class="space-y-1">
+<p class="text-[10px] text-[#618972] uppercase font-bold">Bit Depth</p>
+<p class="text-sm font-medium">32-bit RGBA</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-[#618972] uppercase font-bold">File Hash</p>
+<p class="text-sm font-mono truncate">7f8c...92a1</p>
+</div>
+</div>
+<button class="w-full py-2 bg-red-500 text-white rounded-lg font-bold text-sm shadow-md mt-2 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">delete_forever</span>
+                                    Quarantine Entry
+                                </button>
+</div>
+</div>
+<div class="bg-red-50 dark:bg-red-500/10 border-2 border-red-500 rounded-lg p-4 flex gap-3 shadow-lg">
+<span class="material-symbols-outlined text-red-500 animate-pulse">security_update_warning</span>
+<div>
+<p class="text-sm font-bold text-red-700 dark:text-red-400">Brute Force Attempt</p>
+<p class="text-xs text-red-600 dark:text-red-300/80">Multiple failed decryptions from IP 192.168.1.105 detected in last 5 minutes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<footer class="bg-white dark:bg-background-dark border-t border-[#dbe6e0] dark:border-white/10 px-6 py-2 flex justify-between items-center text-[10px] text-[#618972] dark:text-white/40">
+<div class="flex items-center gap-4">
+<span>API Status: <span class="text-primary font-bold">Operational</span></span>
+<span>Uptime: 99.98%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+<span>Last backup: 12 minutes ago</span>
+</div>
+</footer>
+
+</body></html>

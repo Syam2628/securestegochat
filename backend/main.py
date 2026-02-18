@@ -8,6 +8,8 @@ from datetime import datetime
 import os
 import uuid
 import json
+import hashlib
+from PIL import Image
 
 import models
 import auth
@@ -267,6 +269,16 @@ async def send_image_message(
     with open(file_path, "wb") as f:
         f.write(contents)
 
+    # Compute File Hash
+    file_hash = hashlib.sha256(contents).hexdigest()
+
+    # Get Bit Depth
+    try:
+        with Image.open(file_path) as img:
+            bit_depth = f"{img.mode} ({img.bits if hasattr(img, 'bits') else '8'}-bit)"
+    except Exception:
+        bit_depth = "Unknown"
+
     new_message = models.Message(
         sender_id=current_user.id,
         receiver_id=receiver_id,
@@ -314,7 +326,9 @@ async def send_image_message(
         has_hidden_data=has_hidden,
         extracted_text=extracted_text,
         is_code=is_code,
-        confidence_score=int(confidence)
+        confidence_score=int(confidence),
+        file_hash=file_hash,
+        bit_depth=bit_depth
     )
     db.add(image_message)
     db.commit()
@@ -409,13 +423,15 @@ def get_security_logs(
     # if current_user.username != "admin":
     #     raise HTTPException(status_code=403, detail="Access denied")
 
-    logs = db.query(models.SecurityLog).order_by(
+    logs = db.query(models.SecurityLog, models.ImageMessage).join(
+        models.ImageMessage, models.SecurityLog.image_message_id == models.ImageMessage.id
+    ).order_by(
         models.SecurityLog.created_at.desc()
     ).all()
 
     result = []
 
-    for log in logs:
+    for log, image in logs:
         result.append({
             "id": log.id,
             "detection_type": log.detection_type,
@@ -423,7 +439,11 @@ def get_security_logs(
             "classification": log.classification,
             "confidence": log.confidence,
             "action_taken": log.action_taken,
-            "created_at": log.created_at.isoformat()
+            "created_at": log.created_at.isoformat(),
+            "source_id": image.original_filename,
+            "file_hash": image.file_hash,
+            "bit_depth": image.bit_depth,
+            "status": image.security_status
         })
 
     return result

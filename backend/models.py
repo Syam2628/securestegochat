@@ -50,6 +50,8 @@ class ImageMessage(Base):
     extracted_text = Column(Text, nullable=True)
     is_code = Column(Boolean, default=False)
     confidence_score = Column(Integer, default=0)
+    file_hash = Column(String, nullable=True)
+    bit_depth = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class SecurityLog(Base):
