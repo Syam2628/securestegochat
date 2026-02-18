@@ -28,7 +28,8 @@ app = FastAPI(title="SecureStegoChat API")
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://securestego.vercel.app",  # Production Frontend
+    "https://securestego.vercel.app",
+    "https://securestegochat.vercel.app",  # Production Frontend (Updated)
 ]
 
 app.add_middleware(
