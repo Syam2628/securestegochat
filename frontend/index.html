@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StegoShield — Secure Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="auth">
+  <main class="auth-shell">
+    <section class="card">
+      <h1>🛡 StegoShield AI</h1>
+      <p class="muted">AI-Powered Secure Messaging</p>
+      <div class="tabs">
+        <button id="show-login" class="tab active">Login</button>
+        <button id="show-register" class="tab">Register</button>
+      </div>
+
+      <form id="login-form" class="form active">
+        <label>Username<input name="username" required></label>
+        <label>Password<input name="password" type="password" required></label>
+        <button type="submit">Sign In</button>
+      </form>
+
+      <form id="register-form" class="form">
+        <label>Username<input name="username" required></label>
+        <label>Password<input name="password" type="password" required></label>
+        <button type="submit">Create Account</button>
+      </form>
+      <p id="auth-error" class="error"></p>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+
+</html>
