@@ -59,7 +59,7 @@ function setupAuthPage() {
       });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      location.href = "/chat";
+      location.href = "chat.html";
     } catch (err) {
       error.textContent = err.message;
     }
@@ -80,7 +80,7 @@ function setupAuthPage() {
       });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      location.href = "/chat";
+      location.href = "chat.html";
     } catch (err) {
       error.textContent = err.message;
     }
@@ -110,7 +110,7 @@ function setupChatPage() {
   const user = getCurrentUser();
   const token = getToken();
   if (!user || !token) {
-    location.href = "/";
+    location.href = "index.html";
     return;
   }
 
@@ -132,7 +132,7 @@ function setupChatPage() {
   document.getElementById("logout").addEventListener("click", () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    location.href = "/";
+    location.href = "index.html";
   });
 
   // File name display
