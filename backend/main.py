@@ -10,7 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from database import get_conn, init_db
+from database import get_conn, init_db, SessionLocal
+import db_models  # noqa: F401 – register SQLAlchemy table metadata
 from models import LoginRequest, RegisterRequest, TextMessageRequest
 from steganography import classify_extracted_text, detect_lsb_steganography, extract_lsb_data, log_detection_event
 from websocket_manager import WebSocketManager

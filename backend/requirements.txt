@@ -5,3 +5,4 @@ Pillow==11.3.0
 psycopg2-binary
 python-dotenv
 websockets
+sqlalchemy
