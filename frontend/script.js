@@ -1,6 +1,4 @@
-const IS_LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
-const API_BASE = IS_LOCAL ? "http://127.0.0.1:8000" : "https://securestegochat.onrender.com";
-const WS_BASE = IS_LOCAL ? "ws://127.0.0.1:8000" : "wss://securestegochat.onrender.com";
+// API_BASE and WS_BASE are defined in config.js (loaded before this file)
 
 function getToken() {
   return localStorage.getItem("token") || "";
